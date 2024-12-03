@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "fastify": "^5.1.0",
+    "node": "^20.18.1",
+    "react": "^18.3.1",
+    "sqlite3": "^5.1.7",
+    "vite": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  }
+}
