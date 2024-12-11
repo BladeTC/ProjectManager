@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/main" />} />
         <Route path="/main" element={<MainPage />} />
-        <Route path="/view" element={<ProjectView />} />
+        <Route path="/project/:Id" element={<ProjectView />} />
       </Routes>
     </div>
   );
