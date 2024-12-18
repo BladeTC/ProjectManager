@@ -3,7 +3,8 @@ import sqlite3 from "sqlite3";
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { projects, tasks } from "./schema";
-import { eq, lt, gte, ne } from "drizzle-orm";
+import { eq, lt, and, gte, ne } from "drizzle-orm";
+import { Task } from "./models";
 
 async function main() {
   const db = drizzle({
@@ -70,12 +71,32 @@ async function main() {
     const temp = await db
       .select()
       .from(tasks)
-      .where(eq(tasks.project_id, Number(value.id)));
+      .where(and(eq(tasks.project_id, Number(value.id)), eq(tasks.task_id, 0)));
 
-    reply.code(200).send(temp);
+    const result: Array<Task> = [];
+
+    for (let i = 0; i < temp.length; i++) {
+      if (temp[i].check > 0) {
+        const temp_sub = await db
+          .select()
+          .from(tasks)
+          .where(
+            and(
+              eq(tasks.project_id, Number(value.id)),
+              eq(tasks.task_id, temp[i].id)
+            )
+          );
+
+        result.push({ ...temp[i], subs: temp_sub });
+      } else result.push({ ...temp[i], subs: [] });
+    }
+
+    console.log(temp);
+
+    reply.code(200).send(result satisfies Array<Task>);
   });
 
-  fastify.get("/projects/:id", async (request, reply) => {
+  fastify.get("/project/:id", async (request, reply) => {
     const value = request.params;
 
     if (typeof value !== "object") {
@@ -109,6 +130,9 @@ async function main() {
 
   fastify.post("/tasks", async (request, reply) => {
     const value = request.body;
+    let subtask;
+    let count;
+
     if (typeof value !== "object") {
       console.log("type of value is not object, but instead - " + typeof value);
       reply.code(400).send();
@@ -139,11 +163,32 @@ async function main() {
       reply.code(400);
       return;
     }
+    if (!("subtask_id" in value)) {
+      console.log("no subtask_id in value");
+      reply.code(400);
+      return;
+    }
+    if (typeof value.subtask_id !== "number") {
+      console.log("subtask_id not number, but - " + typeof value.subtask_id);
+      subtask = "";
+    } else {
+      subtask = Number(value.subtask_id);
+      const temp = await db
+        .select({ check: tasks.check })
+        .from(tasks)
+        .where(eq(tasks.id, Number(value.subtask_id)));
+      console.log(temp);
+      await db
+        .update(tasks)
+        .set({ check: temp[0].check + 1 })
+        .where(eq(tasks.id, value.subtask_id));
+    }
     let id = Date.now();
     const body = {
       id: id,
       task: value.task,
       project_id: value.project_id,
+      task_id: Number(subtask),
       check: 0,
     };
     await db.insert(tasks).values(body);
