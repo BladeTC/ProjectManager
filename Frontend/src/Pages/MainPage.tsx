@@ -23,7 +23,7 @@ function App() {
 
   return (
     <div id="main" className="flex flex-col">
-      <div className="flex flex-col-2 h-fit m-0 border-b-2 p-3">
+      <div className="flex flex-col-2 h-fit m-0 border-b-2 p-3 mb-3">
         <p className="text-4xl w-1/2 pl-4 pt-2">Project manager</p>
         <div className="flex flex-row-reverse w-1/2 pb-0 ">
           <Link key="CreateProject" to={`/create_project`}>
@@ -33,13 +33,21 @@ function App() {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-5 pl-2">
         {projects.map((p) => (
-          <Link key={p.id} to={`/project/${p.id}`}>
-            <button key={p.id} className="btn btn-outline m-4 w-3/4 text-xl">
-              {p.name}
-            </button>
-          </Link>
+          <div
+            key={p.id}
+            className="grid grid-cols-2 btn btn-outline text-l m-0 w-full pr-0"
+          >
+            <Link to={`/project/${p.id}`}>
+              <button key={p.id}>{p.name}</button>
+            </Link>
+            <Link to={`/edit_project/${p.id}`}>
+              <button key={p.id} className="link link-primary m-0 text-xs">
+                Edit
+              </button>
+            </Link>
+          </div>
         ))}
       </div>
     </div>

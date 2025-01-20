@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-
 import "../css/ProjectView.css";
 const URL = "/api";
 

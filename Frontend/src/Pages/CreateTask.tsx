@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-
 import "../css/ProjectView.css";
 import { useCallback, useEffect, useState } from "react";
 const URL = "/api";
@@ -38,8 +37,7 @@ function App() {
     }
     const form = e.target;
     const formData = new FormData(form);
-    const formJson = Object.fromEntries(formData.entries());
-    console.log(Number(formJson.sub_tasks)); // (!) This doesn't include multiple select values
+    const formJson = Object.fromEntries(formData.entries()); // (!) This doesn't include multiple select values
     await fetch(URL + "tasks", {
       method: "POST",
       body: JSON.stringify({

@@ -16,6 +16,5 @@ export const tasks = sqliteTable("tasks", {
   project_id: integer()
     .references(() => projects.id)
     .notNull(),
-  task_id: integer(),
-  check: integer().notNull(),
+  task_id: integer().references((): AnySQLiteColumn => tasks.id),
 });
