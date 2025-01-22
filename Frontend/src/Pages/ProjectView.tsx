@@ -67,12 +67,12 @@ function App() {
         </div>
         <div className="flex flex-row-reverse w-1/2 space-x-4 space-x-reverse">
           <Link to="/main">
-            <button className="btn btn-primary text-xl text-center ">
+            <button className="btn btn-primary text-m text-center ">
               Return
             </button>
           </Link>
           <Link to={`/create_task/${project_id.Id}`} className="">
-            <button className="btn btn-primary text-xl text-center ">
+            <button className="btn btn-primary text-nowrap text-m text-center ">
               Add task
             </button>
           </Link>

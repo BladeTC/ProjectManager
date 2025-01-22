@@ -59,14 +59,14 @@ function App() {
   }, [get_task_list]);
   return (
     <div className="flex place-content-center h-screen">
-      <div className="self-center border-l-neutral-50 border-2 w-1/2 rounded-lg">
+      <div className="self-center border-l-neutral-50 border-2 sm:w-1/2 rounded-lg">
         <form onSubmit={handle_submit} className="pr-2 pt-2 flow grid-flow-col">
           <div className="pb-4 pl-2">
             <p className="text-xl pb-2">Task:</p>
             <input
               id="task_input"
               type="text"
-              className="text bg-slate-300 text-black me-6 text-xl w-full"
+              className="input input-bordered input-primary w-full max-w-xs"
               name="project_name"
               required
             />

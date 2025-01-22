@@ -33,11 +33,11 @@ function App() {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-5 pl-2">
+      <div className="grid grid-cols-5 gap-3 pl-2">
         {projects.map((p) => (
           <div
             key={p.id}
-            className="grid grid-cols-2 btn btn-outline text-l m-0 w-full pr-0"
+            className="grid grid-cols-2 btn btn-outline text-l m-0 w-full"
           >
             <Link to={`/project/${p.id}`}>
               <button key={p.id}>{p.name}</button>

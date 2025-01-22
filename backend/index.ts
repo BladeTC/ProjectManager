@@ -6,6 +6,7 @@ import { projects, tasks } from "./schema";
 import { eq, lt, and, gte, ne, isNull, is, inArray } from "drizzle-orm";
 import { Task } from "./models";
 import { isInt16Array } from "util/types";
+import GettingTasks from "./services";
 
 async function main() {
   const db = drizzle({
@@ -63,30 +64,14 @@ async function main() {
       reply.code(400);
       return;
     }
-    if (typeof Number(value.id) !== "number") {
+    const numb = Number(value.id);
+    if (Number.isNaN(numb)) {
       console.log("project_id not number, but - " + typeof value.id);
       reply.code(400);
       return;
     }
 
-    const temp = await db
-      .select()
-      .from(tasks)
-      .where(
-        and(eq(tasks.project_id, Number(value.id)), isNull(tasks.task_id))
-      );
-    let task_ids = temp.map((e) => e.id);
-    const subs = await db
-      .select()
-      .from(tasks)
-      .where(inArray(tasks.task_id, task_ids));
-
-    const result: Array<Task> = temp.map((e) => ({
-      subs: subs.filter((s) => s.task_id === e.id),
-      ...e,
-    }));
-
-    reply.code(200).send(result satisfies Array<Task>);
+    reply.code(200).send(await GettingTasks(numb));
   });
 
   fastify.get("/project/:id", async (request, reply) => {
